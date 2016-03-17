@@ -116,3 +116,9 @@ Comments go here
 		
 		(return-from generate-successors succs)
 	)
+)
+
+(defun goal-state (state)
+	(when (equal state nil) (return-from goal-state nil))
+	(equal state ((1 2 3)(8 0 4)(7 6 5)))
+)
