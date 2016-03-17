@@ -1,0 +1,37 @@
+#|
+	Author: Murray Lahood-Burns
+	Description: This prints a ascii art picture when the cannibals begin the
+		     game outnumbering the missionaries.
+	Arguments: None
+|#
+(defun defeat()
+(format t "~%")
+(format t "                                     ____~%")
+(format t "                              __,---'     `--.__~%")
+(format t "                           ,-'                ; `.~%")
+(format t "                          ,'                  `--.`--.~%")
+(format t "                         ,'                       `._ `-.~%")
+(format t "                         ;                     ;     `-- ;~%")
+(format t "                       ,-'-_       _,-~~~~-.      ,--      `.~%")
+(format t "                       ;;   `-,;    ,'~~`.__    ,;;;    ;  ;~%")
+(format t "                       ;;    ;,'  ,;;      `,  ;;;     `. ;~%")
+(format t "                       `:   ,'    `:;     __/  `.;      ; ;~%")
+(format t "                        ;~~~~^.   `.   `---'~~~~    ;;      ; ;~%")
+(format t "                        `,' `.   `.            .;;;     ;'~%")
+(format t "                        ,',^. `.  `._    __    `:;     ,'~%")
+(format t "                        `-' `--'    ~~`--'~~~~`--.  ~~    ,'~%")
+(format t "                       /;`-;_ ; ;. /. /   ; ~~~~`-.     ;~%")
+(format t "-._                   ; ;  ; `,;`-;__;---;      `----'~%")
+(format t "   `--.__             ``-`-;__;:  ;  ;__;~%")
+(format t " ...     `--.__                `-- `-'~%")
+(format t "`--.:::...     `--.__                ____~%")
+(format t "    `--:::::--.      `--.__    __,--'    `.~%")
+(format t "        `--:::`;....       `--'       ___  `.~%")
+(format t "            `--`-:::...     __           )  ;~%")
+(format t "                  ~~`-:::...   `---.      ( ,'~%")
+(format t "                      ~~`-:::::::::`--.   `-.~%")
+(format t "                          ~~`-::::::::`.    ;~%")
+(format t "                              ~~`--:::,'   ,'~%")
+(format t "                                   ~~~~`--'~~~%")
+(format t "~%")
+)
