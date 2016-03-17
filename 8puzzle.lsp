@@ -37,11 +37,17 @@ Comments go here
 		(when (find 0 top :test #'equal)
 			;move left
 			(when (not (equal (position 0 top) 0))
-			
+				(let ((temp top))
+					(rotatef (nth (position 0 temp) temp) (nth (1- (position 0 temp)) temp))
+					(setf succs (cons temp succs))
+				)
 			)
 			;move right
 			(when (not (equal (position 0 top) (- *MAX* 1)))
-			
+				(let ((temp top))
+					(rotatef (nth (position 0 temp) temp) (nth (1+ (position 0 temp)) temp))
+					(setf succs (cons temp succs))
+				)
 			)
 			;move down
 		
@@ -51,11 +57,17 @@ Comments go here
 		(when (find 0 mid :test #'equal)
 			;move left
 			(when (not (equal (position 0 mid) 0))
-			
+				(let ((temp middle))
+					(rotatef (nth (position 0 temp) temp) (nth (1- (position 0 temp)) temp))
+					(setf succs (cons temp succs))
+				)
 			)
 			;move right
 			(when (not (equal (position 0 mid) (- *MAX* 1)))
-			
+				(let ((temp middle))
+					(rotatef (nth (position 0 temp) temp) (nth (1+ (position 0 temp)) temp))
+					(setf succs (cons temp succs))
+				)
 			)
 			;move up
 			
@@ -67,11 +79,17 @@ Comments go here
 		(when (find 0 bottom :test #'equal)
 			;move left
 			(when (not (equal (position 0 bottom) 0))
-			
+				(let ((temp bottom))
+					(rotatef (nth (position 0 temp) temp) (nth (1- (position 0 temp)) temp))
+					(setf succs (cons temp succs))
+				)
 			)
 			;move right
 			(when (not (equal (position 0 bottom) (- *MAX* 1)))
-			
+				(let ((temp bottom))
+					(rotatef (nth (position 0 temp) temp) (nth (1+ (position 0 temp)) temp))
+					(setf succs (cons temp succs))
+				)
 			)
 			;move up
 		
