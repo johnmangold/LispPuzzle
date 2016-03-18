@@ -18,7 +18,9 @@ Comments go here
 ;-------------------------------------------------------------------------------------
 
 ; load needed files
-(load 'gen-successors)
+(load 'generate-successors)
+(load 'search)
+(load 'solvable)
 
 
 
