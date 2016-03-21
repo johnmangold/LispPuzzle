@@ -21,7 +21,7 @@ Comments go here
 (load 'generate-successors)
 (load 'search)
 (load 'solvable)
-
+(load 'print-solution)
 
 
 
@@ -51,7 +51,7 @@ Comments go here
 			(setf *MAX* (sqrt (length puzzle)))
 			(print "The user provided a puzzle")
 			(print "We would handle calling necessary functions")
-			(print (bfs puzzle))
+			(print-solution (bfs puzzle))
 		)
 	)
 
