@@ -15,6 +15,8 @@
 ;--------------------------------------------------------------------------
 
 (load 'generate_successorsN)
+;(load 'search)
+(load 'print-solution)
 
 ;--------------------------------------------------------------------------
 
@@ -23,7 +25,7 @@
        (goalState (generate_goal_stateN n)))
     (loop 
 	;loop1 - search depth for dfid
-	  (format t "searchDepth: ~S~%" searchDepth)
+	  ;(format t "searchDepth: ~S~%" searchDepth)
 	  (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :parent nil))
         (OPEN (list curNode))
 	    (CLOSED nil)
@@ -36,9 +38,9 @@
 		  (setf CLOSED (cons curNode CLOSED))
 		  
 		  ;check goal state
-		  (format t "curNode: ~S~%"  (node-state curNode))
+		  ;(format t "curNode: ~S~%"  (node-state curNode))
 	      (when (equal (node-state curNode) goalState)
-		    (print_solution_path curNode CLOSED)
+		    (print-solution2 (build-solution curNode CLOSED))
 			(return-from search_dfid t)
 		  )
 		  
@@ -90,4 +92,27 @@
   
   
   
+)
+
+; Build-solution takes a state and a list of (state parent) pairs
+; and constructs the list of states that led to the current state
+; by tracing back through the parents to the start node (nil parent).
+(defun build-solution (node node-list)
+    (do
+        ((path (list (node-state node))))        ; local loop var
+        ((null (node-parent node)) path)         ; termination condition
+
+        ; find the parent of the current node
+        (setf node (member-state (node-parent node) node-list))
+
+        ; add it to the path
+        (setf path (cons (node-state node) path))
+    )
+)
+
+; Member-state looks for a node on the node-list with the same state.
+(defun member-state (state node-list)
+    (dolist (node node-list)
+        (when (equal state (node-state node)) (return node))
+    )
 )
