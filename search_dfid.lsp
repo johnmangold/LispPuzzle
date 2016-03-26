@@ -38,7 +38,7 @@
 		  ;check goal state
 		  (format t "curNode: ~S~%"  (node-state curNode))
 	      (when (equal (node-state curNode) goalState)
-		    (print_solution_path curNode CLOSED)
+		    (print-solution (build-solution curNode CLOSED))
 			(return-from search_dfid t)
 		  )
 		  
