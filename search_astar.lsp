@@ -1,5 +1,3 @@
-(defstruct node state stateZloc stateDepth heuristic parent)
-
 ;-------------------------------------------------------------------
 
 (load 'generate_successorsN)
@@ -8,9 +6,12 @@
 ;-------------------------------------------------------------------
 
 (defun search_Astar (inList zeroLoc n heuristic)
-  (let (goalState (generate_goal_stateN n))
+  (let ((goalState (generate_goal_stateN n))
+       (solutionPath)
+       (nodesGenerated 0)
+       (nodesPlacedOpen 0)
+       (nodesPlacedClosed 0))
     (setf goalState (generate_goal_stateN n))
-(format t "goalstate: ~S~%" goalState)
     (loop
       (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :heuristic 0 :parent nil))
         (OPEN (list curNode))(CLOSED nil))
@@ -20,16 +21,24 @@
           (setf curNode (car OPEN))
           (setf OPEN (cdr OPEN))
           (setf CLOSED (cons curNode CLOSED))
+          (setf nodesPlacedClosed (1+ nodesPlacedClosed))
 
           ;check goal state
           (when (equal (node-state curNode) goalState)
-                (print_solution_path curNode CLOSED)
+            (setf solutionPath (build-solution curNode CLOSED))
+            (format t "Astar graph search ~S~%" heuristic)
+            (format t "---------------------------------~%")
+            (format t "Solution found in ~S moves ~%" (1- (length solutionPath)))
+            (format t "~S nodes generated (~S 'distinct' nodes), ~S nodes expanded ~%"
+              nodesGenerated nodesPlacedOpen nodesPlacedClosed)
+                (print-solution2 solutionPath)
                   (return-from search_Astar t)
           )
 
           ;generate successors
           (dolist (child (generate_successorsN (node-state curNode)(node-stateZloc curNode) n))
             ;for each child node
+            (setf nodesGenerated (1+ nodesGenerated))
             (setf child (make-node :state (first child) 
                                    :stateZloc (second child)
                                    :stateDepth (1+ (node-stateDepth curNode))
@@ -41,6 +50,7 @@
                        (not (member child CLOSED :test #'equal-states)))
               ;put into open if not already in OPEN or CLOSED
               (setf OPEN (cons child OPEN))
+              (setf nodesPlacedOpen (1+ nodesPlacedOpen))
             )    
           )
           ;put the lowest heuristic first

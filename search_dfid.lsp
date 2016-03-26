@@ -7,7 +7,7 @@
 ;--------------------------------------------------------------------------
 
 ; Node structure: stores state and parent.
-(defstruct node state stateZloc stateDepth parent)
+(defstruct node state stateZloc stateDepth heuristic parent)
 
 ; Test if two nodes have the same state.
 (defun equal-states (n1 n2) (equal (node-state n1) (node-state n2)))
