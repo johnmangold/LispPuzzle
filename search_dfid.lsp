@@ -15,7 +15,6 @@
 ;--------------------------------------------------------------------------
 
 (load 'generate_successorsN)
-;(load 'search)
 (load 'print-solution)
 
 ;--------------------------------------------------------------------------
@@ -44,7 +43,6 @@
 		  ;check goal state
 		  ;(format t "curNode: ~S~%"  (node-state curNode))
 	      (when (equal (node-state curNode) goalState)
-		    ;(print-solution (build-solution curNode CLOSED))
 		    (setf solutionPath (build-solution curNode CLOSED))
 		    (format t "DFID graph search~%")
 			(format t "-----------------~%")
