@@ -5,9 +5,20 @@ Comments go here
 
 
 |#
+;-------------------------------------------------------------------------------------
+
+;global variables
+(defvar *MAX*)		; size of puzzle
 
 ;------------- load files -------------
 (load 'search_dfid)
+(load 'bfsN)
+(load 'print-solution)
+(load 'flatten)
+(load 'build-solution)
+
+;------------------global variables------------
+(defvar *MAX*)
 
 ;-------------- helper functions --------------
 
@@ -101,6 +112,7 @@ Comments go here
   (let ((n 0)
        (zeroLoc nil))
     (setf n (sqrt (length inList)))
+	(setf *MAX* (sqrt (length inList)))
 	;check count
 	(if (integerp n)
 	  ()
@@ -112,8 +124,11 @@ Comments go here
 	(setf inList (listSplit inList n))
 	;(format t "~S~%" inList)
 	;call search functions
+	(setf *MAX* n)
+	(format t "~%")
 	;(search_bfs inList zeroLoc n)
 	(search_dfid inList zeroLoc n)
+	(bfsN inList zeroLoc n)
 	;(search_Astar inList zeroLoc n)
   )
 )
@@ -142,15 +157,19 @@ Comments go here
 	    ()
 		(error "Error: Invalid number of input values!~%")
 	  )
-	  (let ((n (sqrt listCount)))
+	  (let ((n (sqrt listCount))
+			(*MAX* (sqrt listCount)))
 	    ;output list
 	    ;(format t "~S~%" inList)
 	    (setf zeroLoc (findZero inList n))
 	    (setf inList (listSplit inList n))
 	    ;(format t "~S~%" inList)
 	    ;call search functions
+		(setf *MAX* n)
+		(format t "~%")
 	    ;(search_bfs inList zeroLoc n)
 	    (search_dfid inList zeroLoc n)
+		(bfsN inList zeroLoc n)
 	    ;(search_Astar inList zeroLoc n)
 	  )
 	)
