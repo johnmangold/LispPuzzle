@@ -5,6 +5,10 @@ Comments go here
 
 
 |#
+;-------------------------------------------------------------------------------------
+
+;global variables
+(defvar *MAX*)		; size of puzzle
 
 ;------------- load files -------------
 (load 'search_dfid)
@@ -120,6 +124,8 @@ Comments go here
 	(setf inList (listSplit inList n))
 	;(format t "~S~%" inList)
 	;call search functions
+	(setf *MAX* n)
+	(format t "~%")
 	;(search_bfs inList zeroLoc n)
 	(search_dfid inList zeroLoc n)
 	(bfsN inList zeroLoc n)
@@ -159,6 +165,8 @@ Comments go here
 	    (setf inList (listSplit inList n))
 	    ;(format t "~S~%" inList)
 	    ;call search functions
+		(setf *MAX* n)
+		(format t "~%")
 	    ;(search_bfs inList zeroLoc n)
 	    (search_dfid inList zeroLoc n)
 		(bfsN inList zeroLoc n)
