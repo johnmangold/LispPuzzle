@@ -117,6 +117,7 @@ Comments go here
 	;(format t "~S~%" inList)
 	;call search functions
 	(setf *MAX* n)
+	(format t "~%")
 	;(search_bfs inList zeroLoc n)
 	(search_dfid inList zeroLoc n)
 	;(search_Astar inList zeroLoc n)
@@ -155,6 +156,7 @@ Comments go here
 	    ;(format t "~S~%" inList)
 	    ;call search functions
 		(setf *MAX* n)
+		(format t "~%")
 	    ;(search_bfs inList zeroLoc n)
 	    (search_dfid inList zeroLoc n)
 	    ;(search_Astar inList zeroLoc n)
