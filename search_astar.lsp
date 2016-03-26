@@ -1,14 +1,16 @@
-(defstruct node state stateZloc stateDepth (heuristic 0 :type integer) parent)
+(defstruct node state stateZloc stateDepth heuristic parent)
 
 ;-------------------------------------------------------------------
 
 (load 'generate_successorsN)
+(load 'goalStateLoc)
 
 ;-------------------------------------------------------------------
 
-(defun search_Astar (inList zeroLoc n)
+(defun search_Astar (inList zeroLoc n heuristic)
   (let (goalState (generate_goal_stateN n))
     (setf goalState (generate_goal_stateN n))
+(format t "goalstate: ~S~%" goalState)
     (loop
       (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :heuristic 0 :parent nil))
         (OPEN (list curNode))(CLOSED nil))
@@ -31,7 +33,8 @@
             (setf child (make-node :state (first child) 
                                    :stateZloc (second child)
                                    :stateDepth (1+ (node-stateDepth curNode))
-                                   :heuristic (+ (node-stateDepth curNode) (tileWrong child goalState n))
+                                   ;:heuristic (+ (node-stateDepth curNode) (tileWrong child goalState n))
+                                   :heuristic (chooseHeuristic heuristic child goalState n (node-stateDepth curNode))
                                    :parent (node-state curNode)))
             ;check if already on OPEN or CLOSED
             (when (and (not (member child OPEN :test #'equal-states))
@@ -41,51 +44,87 @@
             )    
           )
           ;put the lowest heuristic first
-          (let (lowest heuristicCount openList)
-(format t "in let~%")
+          (let (lowest heuristicCount openList storeLowest)
             (setf heuristicCount 0)
             (setf openList OPEN)
+            (setf clear '())
+            (setf OPEN clear)
             (dolist (car openList)
-(format t "lowest: ~S node-heuristic: ~S~%" lowest (node-heuristic (car openList)))
-              (cond 
-                ((equal heuristicCount 0) (setf lowest (node-heuristic (car openList))) (format t "equal~%"))
-                ((< (node-heuristic (car openList)) lowest) (setf lowest (node-heuristic (car openList))) (setf OPEN (cons (car openList) OPEN)) (format t "<~%"))
+              (cond
+                ((equal heuristicCount 0)
+                  (cond
+                    ((not (member (car openList) CLOSED :test #'equal-states))
+                      (setf lowest (node-heuristic (car openList))) (setf storeLowest (car openList)))))
+                ((< (node-heuristic (car openList)) lowest) 
+                  (cond
+                    ((not (member (car openList) CLOSED :test #'equal-states))
+                    (setf lowest (node-heuristic (car openList))) (setf OPEN (cons storeLowest OPEN)) (setf storeLowest (car openList)))))
+                (t 
+                  (cond
+                    ((not (member (car openList) CLOSED :test #'equal-states))
+                    (setf OPEN (cons (car openList) OPEN)))))
               )
 
-(format t "complete car openlist: ~S~%" openList)
-(format t "heuristic?: ~S~%" (node-heuristic (car openList)))
-(format t "(1,1): ~S~%" (car (cdr (car (cdr (node-state (car openList)))))))
+              (setf OPEN (cons storeLowest OPEN))
               (setf openList (cdr openList))
               (incf heuristicCount)
             )
           )
-(format t "complete car OPEN: ~S~%" (car OPEN))
-(format t "complete cdr OPEN: ~S~%" (car (cdr OPEN)))
-(format t "wut~%")
-(read)
         )
+      )
+    )
+  )
 )
- )))
+
+(defun chooseHeuristic (heuristic curNode goalState n depth)
+  (when (equal heuristic "Hamming")
+    (return-from chooseHeuristic (+ depth (tileWrong curNode goalState n)))
+  )
+  (when (equal heuristic "Manhattan")
+    (return-from chooseHeuristic (Manhattan curNode n))
+  )
+)
+
+(defun Manhattan (curNode n)
+  (let (tempNode tNode totalTiles location)
+    (setf goalStateLoc (generate_goalStateLoc n))
+    (setf totalTiles 0)
+    (setf tempNode (car curNode))
+    (loop 
+      for i from 0 to (- n 1) do
+        (setf tNode (car tempNode))
+        (loop
+          for j from 0 to (- n 1) do
+            (setf location (nth (car tNode) goalStateLoc))
+            (setf totalTiles (+ totalTiles (abs (- (car location) i))))
+            (setf totalTiles (+ totalTiles (abs (- (cadr location) j))))
+            (setf tNode (cdr tNode))
+        )
+        (setf tempNode (cdr tempNode))
+    )
+    (return-from Manhattan totalTiles)
+  )
+)
 
 (defun tileWrong (curNode goalState n)
-  ;(format t "curNode: ~S~%" curNode)
-  (setf numWrong 0)
-  (setf tempNode (car curNode))
-  (setf tempState goalState)
-  (loop
-    for i from 1 to n do
-      (setf tNode (car tempNode))
-      (setf tState (car tempState))
-      (loop
-        for j from 1 to n do
-          (if (not (equal (car tNode) (car tState))) (incf numWrong))
-          (setf tNode (cdr tNode))
-          (setf tState (cdr tState))
+  (let (numWrong tempNode tempState tNode tState)
+    (setf numWrong 0)
+    (setf tempNode (car curNode))
+    (setf tempState goalState)
+    (loop
+      for i from 1 to n do
+        (setf tNode (car tempNode))
+        (setf tState (car tempState))
+        (loop
+          for j from 1 to n do
+            (if (not (equal (car tNode) (car tState))) (incf numWrong))
+            (setf tNode (cdr tNode))
+            (setf tState (cdr tState))
+        )
+        (setf tempNode (cdr tempNode))
+        (setf tempState (cdr tempState))
       )
-      (setf tempNode (cdr tempNode))
-      (setf tempState (cdr tempState))
-    )
-  (format t "numWrong: ~S~%" numWrong)
-  (return-from tileWrong numWrong)
+    (return-from tileWrong numWrong)
+  )
 )
 
