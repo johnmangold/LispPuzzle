@@ -67,6 +67,7 @@
 	     (solcont 0)
 	     (sollength (length path))
 	     (toprint 4)
+		 (arrowRow (floor *MAX* 2))
 	     (tempVal 0))
 	(format t "~%")
 	(if (< sollength 4)
@@ -77,7 +78,7 @@
 				(dotimes (j *MAX*)
 				    (setf tempVal (nth (mod (+ j cont) *MAX*) (nth (floor (+ j cont) *MAX*) (nth (+ i solcont) path))))
 					(cond 
-						((and (equal j (- *MAX* 1)) (or (equal rows 0) (equal rows (- *MAX* 1))))
+						((and (equal j (- *MAX* 1)) (not (equal rows arrowRow)))
 						    (if (= tempVal 0)
 							  (format t "        ")
 							  (format t "~2d      " tempVal)
