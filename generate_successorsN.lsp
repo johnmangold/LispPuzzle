@@ -1,15 +1,11 @@
 #|
-
-Comments go here
-
-
-
-
-
-
-
+	Author: Jacob St.Amand
+	Description: given a starting state it generates all possible states and returns a list of possible states.
+				 the possible moves are moving the zero up, down, left, and right if the move is possible.
+	Arguments: inList - starting state in the form of a list ex. (1 2 3 4 5 6 7 8 0)
+			   stateZloc - position of the zero in inList
+			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
 |#
-
 ;returns list of (child childZpos)
 (defun generate_successorsN (state stateZloc n)
   ;define local variables
@@ -68,6 +64,11 @@ Comments go here
   )
 )
 
+#|
+	Author: Jacob St.Amand
+	Description: given a puzzle size, this generates what the goal state should look like ex. (1 2 3 8 0 4 7 6 5)
+	Arguments: n - square root of length of puzzle list ex if puzzle is (1 2 3 4 5 6 7 8 0) then n=3
+|#
 (defun generate_goal_stateN (n)
   ;generate goal state
   (let ((n2 (* n n))
@@ -154,9 +155,4 @@ Comments go here
 	
 	(return-from generate_goal_stateN goalState)
   )
-)
-
-(defun print_solution_path (state stateList)
-  (format t "print solution path here!~%")
-  (return-from print_solution_path nil)
 )

@@ -17,12 +17,23 @@ Modifications:
 
 (defvar *flag*)
 
+#|
+	Author: Dr.John Weiss
+	Description: checks if an 8puzzle is solvable or not
+	Arguments: L - 1d list representing starting state of puzzle
+|#
 (defun solvable (L)
     (setf *flag* nil)                               ; global *flag*
     (mapcar #'(lambda (elem) (disorder elem L)) L)
     (eq *flag* (evenp (position 0 L)))
 )
 
+#|
+	Author: Dr.John Weiss
+	Description: rearranges elements in list
+	Arguments: elem - single element
+			   L - 1d lilst representing starting state of puzzle
+|#
 (defun disorder (elem L)
     (cond
         ((eq (car L) elem))

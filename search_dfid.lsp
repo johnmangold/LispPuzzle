@@ -1,15 +1,15 @@
-#|
-
-
-
-|#
-
 ;--------------------------------------------------------------------------
 
 ; Node structure: stores state and parent.
 (defstruct node state stateZloc stateDepth heuristic parent)
 
 ; Test if two nodes have the same state.
+#|
+	Author: Dr.John Weiss
+	Description: checks if two states are equal
+	Arguments: n1 - state to be checked
+			   n2 - state to be compared to
+|#
 (defun equal-states (n1 n2) (equal (node-state n1) (node-state n2)))
 
 ;--------------------------------------------------------------------------
@@ -19,6 +19,13 @@
 
 ;--------------------------------------------------------------------------
 
+#|
+	Author: Jacob St.Amand
+	Description: performs a depth first iterated deepening search to find a solution to a given puzzle size
+	Arguments: inList - starting state in the form of a list ex. (1 2 3 4 5 6 7 8 0)
+			   zeroLoc - position of the zero in inList
+			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
+|#
 (defun search_dfid (inList zeroLoc n)
   (let ((searchDepth 1)
        (goalState (generate_goal_stateN n))
@@ -27,7 +34,6 @@
 	   (nodesPlacedClosed 0))
     (loop 
 	;loop1 - search depth for dfid
-	  ;(format t "searchDepth: ~S~%" searchDepth)
 	  (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :parent nil))
         (OPEN (list curNode))
 	    (CLOSED nil)
@@ -40,8 +46,6 @@
 		  (setf OPEN (cdr OPEN))
 		  (setf CLOSED (cons curNode CLOSED))
 		  
-		  ;check goal state
-		  ;(format t "curNode: ~S~%"  (node-state curNode))
 	      (when (equal (node-state curNode) goalState)
 		    (setf solutionPath (build-solution curNode CLOSED))
 		    (format t "DFID graph search~%")
@@ -88,7 +92,6 @@
 		      ;check if searchDepth was reached
 		      (when (null maxSearchDepth)
 			    ;increasing search depth will have no effect
-			    (format t "No solution found!~%")
 			    (return-from search_dfid nil)
 			  )
 			  ;break from current loop
@@ -107,26 +110,3 @@
   
   
 )
-
-#|; Build-solution takes a state and a list of (state parent) pairs
-; and constructs the list of states that led to the current state
-; by tracing back through the parents to the start node (nil parent).
-(defun build-solution (node node-list)
-    (do
-        ((path (list (node-state node))))        ; local loop var
-        ((null (node-parent node)) path)         ; termination condition
-
-        ; find the parent of the current node
-        (setf node (member-state (node-parent node) node-list))
-
-        ; add it to the path
-        (setf path (cons (node-state node) path))
-    )
-)
-
-; Member-state looks for a node on the node-list with the same state.
-(defun member-state (state node-list)
-    (dolist (node node-list)
-        (when (equal state (node-state node)) (return node))
-    )
-)|#

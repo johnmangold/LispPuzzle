@@ -1,15 +1,8 @@
 #|
-
-Comments go here
-
-
-
-
-
-
-
+	Author: Jason Anderson
+	Description: creates goal state given puzzle size
+	Arguments: n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
 |#
-
 (defun generate_goalStateLoc (n)
   ;generate goal state
   (let ((n2 (* n n))

@@ -10,6 +10,12 @@
 (defstruct bbnode state stateZloc parent)
 
 ; Test if two bnodes have the same state.
+#|
+	Author: Dr.John Weiss
+	Description: checks if the state of two given nodes are the same
+	Arguments: n1 - node to check
+			   n2 - node to compare n1 to
+|#
 (defun bequal-states (n1 n2) (equal (node-state n1) (node-state n2)))
 
 ;--------------------------------------------------------------------------
@@ -18,7 +24,13 @@
 
 ;--------------------------------------------------------------------------
 
-
+#|
+	Author: John Mangold
+	Description: performs breadth first search.
+	Arguments: inList - starting state in the form of a list ex. (1 2 3 4 5 6 7 8 0)
+			   zeroLoc - position of the zero in inList
+			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
+|#
 (defun bfsN (inList zeroLoc n)
   (let ((goalState (generate_goal_stateN n))
 		(nodesGenerated 0)
@@ -35,7 +47,6 @@
 				  (setf CLOSED (cons curNode CLOSED))
 				  
 				  ;check goal state
-				  (format t "curNode: ~S~%"  (node-state curNode))
 				  (when (equal (node-state curNode) goalState)
 						(setf solutionPath (build-solution curNode CLOSED))
 						(format t "BFS graph search~%")

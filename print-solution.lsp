@@ -1,3 +1,8 @@
+#|
+	Author: John Mangold
+	Description: given a 1d list it will print a formatted solution path
+	Arguments: path - a list of states leading to the the solution
+|#
 (defun print-solution (path)
 	;will be a double loop
 	;outer loop runs through path
@@ -54,7 +59,11 @@
 	)
 )
 
-
+#|
+	Author: Jacob St.Amand
+	Description: given a list of states it prints a representation of the path to the solution
+	Arguments: path - list states leading to the solution
+|#
 (defun print-solution2 (path)
 	;will be a double loop
 	;outer loop runs through path

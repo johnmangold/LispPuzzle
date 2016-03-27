@@ -5,6 +5,14 @@
 
 ;-------------------------------------------------------------------
 
+#|
+	Author: Jason Anderson
+	Description: performs an A* search with two admissable heuristics and one inadmissable heuristic
+	Arguments: inList - starting state in the form of a list ex. (1 2 3 4 5 6 7 8 0)
+			   zeroLoc - position of the zero in inList
+			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
+			   heuristic - name of the heuristic to use
+|#
 (defun search_Astar (inList zeroLoc n heuristic)
   (let ((goalState (generate_goal_stateN n))
        (solutionPath)
@@ -86,15 +94,30 @@
   )
 )
 
+#|
+	Author: Jason Anderson
+	Description: depending on chosen heuristic this performs the appropriate action
+	Arguments: heuristic - which heuristic is being used
+			   curNode - the current node in the state search
+			   goalState - the desired state for a goal
+			   n - size of puzzle
+			   depth - how far into the solution path the curNode is.  depth=g(n)
+|#
 (defun chooseHeuristic (heuristic curNode goalState n depth)
   (when (equal heuristic "Hamming")
     (return-from chooseHeuristic (+ depth (tileWrong curNode goalState n)))
   )
   (when (equal heuristic "Manhattan")
-    (return-from chooseHeuristic (Manhattan curNode n))
+    (return-from chooseHeuristic (+ depth (Manhattan curNode n)))
   )
 )
 
+#|
+	Author: Jason Anderson
+	Description: using the Manhattan distance to determine how far a solution is from the goal state
+	Arguments: curNode - the current node in the state search
+			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
+|#
 (defun Manhattan (curNode n)
   (let (tempNode tNode totalTiles location)
     (setf goalStateLoc (generate_goalStateLoc n))
@@ -116,6 +139,13 @@
   )
 )
 
+#|
+	Author: Jason Anderson
+	Description: checks how many spots are wrong compared to the given goal state
+	Arguments: curNode - the current state on the search for the solution
+			   goalState - the solution for the given puzzle size
+			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
+|#
 (defun tileWrong (curNode goalState n)
   (let (numWrong tempNode tempState tNode tState)
     (setf numWrong 0)
