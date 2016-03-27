@@ -47,12 +47,16 @@
 				  (setf CLOSED (cons curNode CLOSED))
 				  
 				  ;check goal state
+<<<<<<< HEAD
+=======
+				  ;(format t "curNode: ~S~%"  (node-state curNode))
+>>>>>>> 036a69c69f73df0706334a8d2491c3d037952865
 				  (when (equal (node-state curNode) goalState)
 						(setf solutionPath (build-solution curNode CLOSED))
 						(format t "BFS graph search~%")
 						(format t "-----------------~%")
 						(format t "Solution found in ~S moves~%" (1- (length solutionPath)))
-						(format t "~S nodes generated (~S 'distinct' nodes), ~S nodes expanded~%"
+						(format t "~S nodes generated (~S distinct nodes), ~S nodes expanded~%"
 							nodesGenerated nodesPlacedOpen nodesPlacedClosed)
 						(print-solution2 solutionPath)
 						(return-from bfsN t)

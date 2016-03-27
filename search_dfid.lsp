@@ -51,7 +51,7 @@
 		    (format t "DFID graph search~%")
 			(format t "-----------------~%")
 			(format t "Solution found in ~S moves~%" (1- (length solutionPath)))
-			(format t "~S nodes generated (~S 'distinct' nodes), ~S nodes expanded~%"
+			(format t "~S nodes generated (~S distinct nodes), ~S nodes expanded~%"
 			    nodesGenerated nodesPlacedOpen nodesPlacedClosed)
 		    (print-solution2 solutionPath)
 			(return-from search_dfid t)

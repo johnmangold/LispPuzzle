@@ -37,7 +37,7 @@
             (format t "Astar graph search ~S~%" heuristic)
             (format t "---------------------------------~%")
             (format t "Solution found in ~S moves ~%" (1- (length solutionPath)))
-            (format t "~S nodes generated (~S 'distinct' nodes), ~S nodes expanded ~%"
+            (format t "~S nodes generated (~S distinct nodes), ~S nodes expanded ~%"
               nodesGenerated nodesPlacedOpen nodesPlacedClosed)
                 (print-solution2 solutionPath)
                   (return-from search_Astar t)
