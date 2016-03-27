@@ -47,10 +47,7 @@
 				  (setf CLOSED (cons curNode CLOSED))
 				  
 				  ;check goal state
-<<<<<<< HEAD
-=======
-				  ;(format t "curNode: ~S~%"  (node-state curNode))
->>>>>>> 036a69c69f73df0706334a8d2491c3d037952865
+
 				  (when (equal (node-state curNode) goalState)
 						(setf solutionPath (build-solution curNode CLOSED))
 						(format t "BFS graph search~%")
