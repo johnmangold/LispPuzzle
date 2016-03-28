@@ -158,6 +158,7 @@ Modifications:
 	(search_dfid inList zeroLoc n)
 	(search_Astar inList zeroLoc n "Hamming")
 	(search_Astar inList zeroLoc n "Manhattan")
+        (search_Astar inList zeroLoc n "Inadmissible")
   )
 )
 
@@ -196,6 +197,7 @@ Modifications:
 	    (search_dfid inList zeroLoc n)
 	    (search_Astar inList zeroLoc n "Hamming")
 	    (search_Astar inList zeroLoc n "Manhattan")
+	    (search_Astar inList zeroLoc n "Inadmissible")
 	  )
 	)
   ))
