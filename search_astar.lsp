@@ -15,14 +15,13 @@
 |#
 (defun search_Astar (inList zeroLoc n heuristic)
   (let ((goalState (generate_goal_stateN n))
-       (solutionPath)
        (nodesGenerated 0)
        (nodesPlacedOpen 0)
        (nodesPlacedClosed 0))
     (setf goalState (generate_goal_stateN n))
     (loop
       (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :heuristic 0 :parent nil))
-        (OPEN (list curNode))(CLOSED nil))
+        (OPEN (list curNode))(CLOSED nil) (solutionPath nil))
 
         (loop
           ;get current node from OPEN, update OPEN and CLOSED
@@ -50,7 +49,6 @@
             (setf child (make-node :state (first child) 
                                    :stateZloc (second child)
                                    :stateDepth (1+ (node-stateDepth curNode))
-                                   ;:heuristic (+ (node-stateDepth curNode) (tileWrong child goalState n))
                                    :heuristic (chooseHeuristic heuristic child goalState n (node-stateDepth curNode))
                                    :parent (node-state curNode)))
             ;check if already on OPEN or CLOSED
@@ -62,7 +60,7 @@
             )    
           )
           ;put the lowest heuristic first
-          (let (lowest heuristicCount openList storeLowest)
+          (let (lowest heuristicCount openList storeLowest clear)
             (setf heuristicCount 0)
             (setf openList OPEN)
             (setf clear '())
@@ -101,7 +99,7 @@
 			   curNode - the current node in the state search
 			   goalState - the desired state for a goal
 			   n - size of puzzle
-			   depth - how far into the solution path the curNode is.  depth=g(n)
+			   depth - how far into the solution path the curNode is.  mepth=g(n)
 |#
 (defun chooseHeuristic (heuristic curNode goalState n depth)
   (when (equal heuristic "Hamming")
@@ -109,6 +107,9 @@
   )
   (when (equal heuristic "Manhattan")
     (return-from chooseHeuristic (+ depth (Manhattan curNode n)))
+  )
+  (when (equal heuristic "Inadmissible")
+    (return-from chooseHeuristic (+ depth (+ (tileWrong curNode goalState n) (Manhattan curNode n))))
   )
 )
 
