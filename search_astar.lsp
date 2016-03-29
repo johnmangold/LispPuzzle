@@ -1,3 +1,15 @@
+
+; Test if two nodes have the same state.
+#|
+	Author: Dr.John Weiss
+	Description: checks if two states are equal
+	Arguments: n1 - state to be checked
+			   n2 - state to be compared to
+|#
+(defun equal-node-state (n1 n2) (equal (node-state n1) n2))
+
+(defun heuristic-lt (n1 n2) (< (node-heuristic n1) (node-heuristic n2)))
+
 ;-------------------------------------------------------------------
 
 (load 'generate_successorsN)
@@ -21,18 +33,12 @@
     (setf goalState (generate_goal_stateN n))
     (loop
       (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :heuristic 0 :parent nil))
-        (OPEN (list curNode))(CLOSED nil) (solutionPath nil) (prevDepth 0))
+        (OPEN (list curNode))(CLOSED nil) (solutionPath nil))
 
         (loop
           ;get current node from OPEN, update OPEN and CLOSED
           (setf curNode (car OPEN))
           (setf OPEN (cdr OPEN))
-(format t "prevDepth ~S~%" prevDepth)
-(format t "(node-stateDepth curNode) ~S~%" (node-stateDepth curNode))
-          (when (< (node-stateDepth curNode) prevDepth)
-            ;(setf CLOSED (member (member-state (node-parent curNode) CLOSED) CLOSED :test #'equal))
-          )
-          ;(setf prevDepth (node-stateDepth curNode))
           (setf CLOSED (cons curNode CLOSED))
           (setf nodesPlacedClosed (1+ nodesPlacedClosed))
 
@@ -48,50 +54,32 @@
                   (return-from search_Astar t)
           )
 
+		  (let ((tempSolutionPath (build-solution curNode CLOSED)))
           ;generate successors
-          (dolist (child (generate_successorsN (node-state curNode)(node-stateZloc curNode) n))
-            ;for each child node
-            (setf nodesGenerated (1+ nodesGenerated))
-            (setf child (make-node :state (first child) 
-                                   :stateZloc (second child)
-                                   :stateDepth (1+ (node-stateDepth curNode))
-                                   :heuristic (chooseHeuristic heuristic child goalState n (node-stateDepth curNode))
-                                   :parent (node-state curNode)))
-            ;check if already on OPEN or CLOSED
-            (when (and (not (member child OPEN :test #'equal-states))
-                       (not (member child CLOSED :test #'equal-states)))
-              ;put into open if not already in OPEN or CLOSED
-              (setf OPEN (cons child OPEN))
-              (setf nodesPlacedOpen (1+ nodesPlacedOpen))
-            )    
-          )
-          ;put the lowest heuristic first
-          (let (lowest heuristicCount openList storeLowest clear)
-            (setf heuristicCount 0)
-            (setf openList OPEN)
-            (setf clear '())
-            (setf OPEN clear)
-            (dolist (car openList)
-              (cond
-                ((equal heuristicCount 0)
-                  (cond
-                    ((not (member (car openList) CLOSED :test #'equal-states))
-                      (setf lowest (node-heuristic (car openList))) (setf storeLowest (car openList)))))
-                ((< (node-heuristic (car openList)) lowest) 
-                  (cond
-                    ((not (member (car openList) CLOSED :test #'equal-states))
-                    (setf lowest (node-heuristic (car openList))) (setf OPEN (cons storeLowest OPEN)) (setf storeLowest (car openList)))))
-                (t 
-                  (cond
-                    ((not (member (car openList) CLOSED :test #'equal-states))
-                    (setf OPEN (cons (car openList) OPEN)))))
+            (dolist (child (generate_successorsN (node-state curNode)(node-stateZloc curNode) n))
+              ;for each child node
+              (setf nodesGenerated (1+ nodesGenerated))
+              (setf child (make-node :state (first child) 
+                                     :stateZloc (second child)
+                                     :stateDepth (1+ (node-stateDepth curNode))
+                                     :heuristic (chooseHeuristic heuristic child goalState n (node-stateDepth curNode))
+                                     :parent (node-state curNode)))
+			  ;check if already generated for this path
+			  (when (not (member child tempSolutionPath :test #'equal-node-state))
+              ;check if already on OPEN or CLOSED
+              ;(when (and (not (member child OPEN :test #'equal-states))
+                         ;(not (member child CLOSED :test #'equal-states)))
+                ;put into open if not already in OPEN or CLOSED
+                (setf OPEN (cons child OPEN))
+                (setf nodesPlacedOpen (1+ nodesPlacedOpen))
               )
-
-              (setf OPEN (cons storeLowest OPEN))
-              (setf openList (cdr openList))
-              (incf heuristicCount)
-            )
+		    )
+			
           )
+		  
+          ;sort by heuristic
+		  (sort OPEN #'heuristic-lt)
+		  
         )
       )
     )
@@ -174,4 +162,3 @@
     (return-from tileWrong numWrong)
   )
 )
-
