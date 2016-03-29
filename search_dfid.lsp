@@ -34,7 +34,6 @@
 	   (nodesPlacedClosed 0))
     (loop 
 	;loop1 - search depth for dfid
-	  (format t "searchDepth: ~S~%" searchDepth)
 	  (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :parent nil))
         (OPEN (list curNode))
 	    (CLOSED nil)
