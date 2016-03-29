@@ -34,16 +34,26 @@
 	   (nodesPlacedClosed 0))
     (loop 
 	;loop1 - search depth for dfid
+	  (format t "searchDepth: ~S~%" searchDepth)
 	  (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :parent nil))
         (OPEN (list curNode))
 	    (CLOSED nil)
 		(maxSearchDepth nil)
-		(solutionPath nil))
+		(solutionPath nil)
+		(prevDepth 0))
         (loop
 		
 		  ;get current node from OPEN, update OPEN and CLOSED
 		  (setf curNode (car OPEN))
 		  (setf OPEN (cdr OPEN))
+		  
+		  (when (< (node-stateDepth curNode) prevDepth)
+		    (setf CLOSED (member (member-state (node-parent curNode) CLOSED) CLOSED :test #'equal))
+			
+		  )
+		  
+		  (setf prevDepth (node-stateDepth curNode))
+		  
 		  (setf CLOSED (cons curNode CLOSED))
 		  
 	      (when (equal (node-state curNode) goalState)
@@ -70,6 +80,7 @@
 			                       :stateZloc (second child)
 								   :stateDepth (1+ (node-stateDepth curNode))
 								   :parent (node-state curNode)))
+			
 			  ;check if already on OPEN or CLOSED
 			  (when (and (not (member child OPEN :test #'equal-states))
 			             (not (member child CLOSED :test #'equal-states)))
@@ -86,6 +97,7 @@
 			(when (>= (node-stateDepth curNode) searchDepth)
 			  (setf maxSearchDepth t)
 			)
+			
 			
 			;check if search exausted
 		    (when (null OPEN)
