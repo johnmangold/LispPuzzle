@@ -22,9 +22,9 @@
 #|
 	Author: Jacob St.Amand
 	Description: performs a depth first iterated deepening search to find a solution to a given puzzle size
-	Arguments: inList - starting state in the form of a list ex. (1 2 3 4 5 6 7 8 0)
+	Arguments: inList - starting state in the form of a list of lists ex. ((1 2 3) (4 5 6) (7 8 0))
 			   zeroLoc - position of the zero in inList
-			   n - square root of length of inList ex if inList is (1 2 3 4 5 6 7 8 0) then n=3
+			   n - square root of length of inList ex if inList is ((1 2 3) (4 5 6) (7 8 0)) then n=3
 |#
 (defun search_dfid (inList zeroLoc n)
   (let ((searchDepth 1)
@@ -46,15 +46,19 @@
 		  (setf curNode (car OPEN))
 		  (setf OPEN (cdr OPEN))
 		  
+		  ;if we back up the tree at all...
+		  ;then trim the CLOSED list
 		  (when (< (node-stateDepth curNode) prevDepth)
 		    (setf CLOSED (member (member-state (node-parent curNode) CLOSED) CLOSED :test #'equal))
 			
 		  )
 		  
+		  ;keep track of depth of prev node to know when we back up the tree
 		  (setf prevDepth (node-stateDepth curNode))
 		  
 		  (setf CLOSED (cons curNode CLOSED))
 		  
+		  ;check for goal state
 	      (when (equal (node-state curNode) goalState)
 		    (setf solutionPath (build-solution curNode CLOSED))
 		    (format t "DFID graph search~%")
