@@ -21,12 +21,18 @@
     (setf goalState (generate_goal_stateN n))
     (loop
       (let* ((curNode (make-node :state inList :stateZloc zeroLoc :stateDepth 0 :heuristic 0 :parent nil))
-        (OPEN (list curNode))(CLOSED nil) (solutionPath nil))
+        (OPEN (list curNode))(CLOSED nil) (solutionPath nil) (prevDepth 0))
 
         (loop
           ;get current node from OPEN, update OPEN and CLOSED
           (setf curNode (car OPEN))
           (setf OPEN (cdr OPEN))
+(format t "prevDepth ~S~%" prevDepth)
+(format t "(node-stateDepth curNode) ~S~%" (node-stateDepth curNode))
+          (when (< (node-stateDepth curNode) prevDepth)
+            ;(setf CLOSED (member (member-state (node-parent curNode) CLOSED) CLOSED :test #'equal))
+          )
+          ;(setf prevDepth (node-stateDepth curNode))
           (setf CLOSED (cons curNode CLOSED))
           (setf nodesPlacedClosed (1+ nodesPlacedClosed))
 
