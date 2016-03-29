@@ -1,23 +1,3 @@
-#|
-
-
-
-|#
-
-;--------------------------------------------------------------------------
-
-; bnode structure: stores state and parent.
-(defstruct bbnode state stateZloc parent)
-
-; Test if two bnodes have the same state.
-#|
-	Author: Dr.John Weiss
-	Description: checks if the state of two given nodes are the same
-	Arguments: n1 - node to check
-			   n2 - node to compare n1 to
-|#
-(defun bequal-states (n1 n2) (equal (node-state n1) (node-state n2)))
-
 ;--------------------------------------------------------------------------
 
 (load 'generate_successorsN)
@@ -41,13 +21,12 @@
 			(CLOSED nil))
 			(loop
 			
-				  ;get current bnode from OPEN, update OPEN and CLOSED
+				  ;get current node from OPEN, update OPEN and CLOSED
 				  (setf curNode (car OPEN))
 				  (setf OPEN (cdr OPEN))
 				  (setf CLOSED (cons curNode CLOSED))
 				  
 				  ;check goal state
-
 				  (when (equal (node-state curNode) goalState)
 						(setf solutionPath (build-solution curNode CLOSED))
 						(format t "BFS graph search~%")
@@ -63,15 +42,16 @@
 				;generate successors
 				(dolist (child (generate_successorsN (node-state curNode) (node-stateZloc   curNode) n))
 				
-					(setf nodesGenerated (1+ nodesGenerated))
-				  ;for each child bnode
+				  (setf nodesGenerated (1+ nodesGenerated))
+
+				  ;for each child node
 				  (setf child (make-node :state (first child) 
 									   :stateZloc (second child)
 									   :parent (node-state curNode)))
 				
 				  ;check if already on OPEN or CLOSED
-				  (when (and (not (member child OPEN :test #'bequal-states))
-							 (not (member child CLOSED :test #'bequal-states)))
+				  (when (and (not (member child OPEN :test #'equal-states))
+							 (not (member child CLOSED :test #'equal-states)))
 					;add to OPEN list
 					(setf OPEN (append OPEN (list child)))
 					(setf nodesPlacedOpen (1+ nodesPlacedOpen))

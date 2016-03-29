@@ -27,6 +27,7 @@ Modifications:
 (load 'search_astar)
 (load 'print-solution)
 (load 'build-solution)
+(load 'solvable)
 
 ;------------------global variables------------
 (defvar *MAX*)
@@ -143,6 +144,15 @@ Modifications:
        (zeroLoc nil))
     (setf n (sqrt (length inList)))
 	(setf *MAX* (sqrt (length inList)))
+	(when (equal *MAX* 3)
+		(cond
+			((not (solvable inList))
+				(format t "This puzzle is not solvable. ~%The program will exit.~%")
+				(return)
+			)
+		)
+	)
+	
 	;check count
 	(if (integerp n)
 	  ()
@@ -187,6 +197,15 @@ Modifications:
 	  )
 	  (let ((n (sqrt listCount))
 			(*MAX* (sqrt listCount)))
+		(when (equal *MAX* 3)
+			(cond
+				((not (solvable inList))
+					(format t "This puzzle is not solvable. ~%The program will exit.~%")
+					(return)
+				)
+			)
+		)
+		
 	    (setf zeroLoc (findZero inList n))
 	    (setf inList (listSplit inList n))
 	    ;call search functions
