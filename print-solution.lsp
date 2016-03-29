@@ -19,9 +19,9 @@
 			(flatpath (copy-list path))
 		)
 		
-		(dolist (state flatpath)
-			(setf (nth (position state flatpath) flatpath) (flatten state))
-		)
+		;(dolist (state flatpath)
+		;	(setf (nth (position state flatpath) flatpath) (flatten state))
+		;)
 		
 		(format t "~%")
 		(dotimes (num (ceiling (length flatpath) 4))

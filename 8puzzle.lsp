@@ -26,7 +26,6 @@ Modifications:
 (load 'bfsN)
 (load 'search_astar)
 (load 'print-solution)
-(load 'flatten)
 (load 'build-solution)
 
 ;------------------global variables------------
